@@ -4,13 +4,17 @@
     Write-Host -ForegroundColor Yellow -BackgroundColor Black "ADMINISTRACIÓN COMPLETA DEL SISTEMA`n"
     Write-Host -ForegroundColor Magenta -BackgroundColor Black "USUARIOS Y GRUPOS LOCALES:`n"
     Write-Host -ForegroundColor Cyan "  1)" -NoNewline
-    " Gestión de Usuarios y Grupos."
+    " Crear un usuario."
     Write-Host -ForegroundColor Cyan "  2)" -NoNewline
-    " Opción 2."
+    " Eliminar un usuario."
     Write-Host -ForegroundColor Cyan "  3)" -NoNewline
-    " Opción 3."
+    " Crear un grupo."
     Write-Host -ForegroundColor Cyan "  4)" -NoNewline
-    " Opción 4."
-    Write-Host -ForegroundColor Red "  5)" -NoNewline
+    " Eliminar un grupo."
+    Write-Host -ForegroundColor Cyan "  5)" -NoNewline
+    " Meter un usuario en un grupo."
+    Write-Host -ForegroundColor Cyan "  6)" -NoNewline
+    " Sacar un usuario de un grupo."
+    Write-Host -ForegroundColor Red "  7)" -NoNewline
     " Salir.`n"
 }
