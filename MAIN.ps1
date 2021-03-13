@@ -14,10 +14,6 @@ while ($opcion -ne 5)
         1 {
             while ($opcionUsuarios -ne 7)
             {
-                Write-Host "Cargando..."
-
-                Start-Sleep 0.8
-
                 menu_usuarios
 
                 $opcionUsuarios = Read-Host "Elige una opción"
@@ -27,30 +23,104 @@ while ($opcion -ne 5)
                     1 {
                         Clear-Host
 
-                        Write-Host "Opcion 1"
+                        Write-Host -ForegroundColor Green -BackgroundColor Black "CREAR USUARIO LOCAL`n"
 
-                        Read-Host "Pulsa cualquier tecla para continuar..."
+                        $usuario = Read-Host "Nombre del usuario (En blanco para cancelar)"
+
+                        if ($usuario)
+                        {
+                            $existe = $(try { Get-LocalUser -Name $usuario -ErrorAction SilentlyContinue } catch{}) -ne $null
+
+                            if ($existe -eq $false)
+                            {
+                                $contraseña = Read-Host "Contraseña para el usuario" -AsSecureString
+
+                                crear_usuario -usuario $usuario -contraseña $contraseña
+
+                                Write-Host "Usuario $($usuario) creado correctamente."
+                            }
+                            else
+                            {
+                                Write-Host "`nEl usuario $($usuario) ya existe."
+                            }
+                        }
+
+                        pulsar_para_continuar
                     }
                     2 {
                         Clear-Host
 
-                        Write-Host "Opcion 2"
+                        Write-Host -ForegroundColor Green -BackgroundColor Black "ELIMINAR USUARIO LOCAL`n"
 
-                        Read-Host "Pulsa cualquier tecla para continuar..."
+                        Write-Host -ForegroundColor Cyan "USUARIOS DEL SISTEMA:"
+
+                        $usuarios = Get-LocalUser
+
+                        foreach ($user in $usuarios)
+                        {
+                            Write-Host $user.Name "    " -NoNewline
+                        }
+
+                        $usuario = Read-Host "`n`nNombre del usuario (En blanco para cancelar)"
+
+                        if ($usuario)
+                        {
+                            borrar_usuario -usuario $usuario
+
+                            Write-Host "`nUsuario $($usuario) eliminado correctamente."
+                        }
+
+                        pulsar_para_continuar
                     }
                     3 {
                         Clear-Host
 
-                        Write-Host "Opcion 3"
+                        Write-Host -ForegroundColor Green -BackgroundColor Black "CREAR GRUPO LOCAL`n"
 
-                        Read-Host "Pulsa cualquier tecla para continuar..."
+                        $grupo = Read-Host "Nombre del grupo (En blanco para cancelar)"
+
+                        if ($grupo)
+                        {
+                            $existe = $(try { Get-LocalGroup -Name $grupo -ErrorAction SilentlyContinue } catch{}) -ne $null
+
+                            if ($existe -eq $false)
+                            {
+                                crear_grupo -grupo $grupo
+
+                                Write-Host "Grupo $($grupo) creado correctamente."
+                            }
+                            else
+                            {
+                                Write-Host "`nEl grupo $($grupo) ya existe."
+                            }
+                        }
+
+                        pulsar_para_continuar
                     }
                     4 {
                         Clear-Host
 
-                        Write-Host "Opcion 4"
+                        Write-Host -ForegroundColor Green -BackgroundColor Black "ELIMINAR GRUPO LOCAL`n"
 
-                        Read-Host "Pulsa cualquier tecla para continuar..."
+                        Write-Host -ForegroundColor Cyan "GRUPO DEL SISTEMA:"
+
+                        $grupos = Get-LocalGroup
+
+                        foreach ($group in $grupos)
+                        {
+                            Write-Host $group.Name
+                        }
+
+                        $grupo = Read-Host "`n`nNombre del grupo (En blanco para cancelar)"
+
+                        if ($grupo)
+                        {
+                            borrar_grupo -grupo $grupo
+
+                            Write-Host "`nGrupo $($grupo) eliminado correctamente."
+                        }
+
+                        pulsar_para_continuar
                     }
                     5 {
                         Clear-Host

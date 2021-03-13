@@ -20,3 +20,8 @@ function menu_principal
     Write-Host -ForegroundColor Red "  5)" -NoNewline
     " Salir.`n"
 }
+
+function pulsar_para_continuar
+{
+    Read-Host "`nPulsa cualquier tecla para continuar..."
+}
