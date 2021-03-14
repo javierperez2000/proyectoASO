@@ -54,3 +54,21 @@ function borrar_grupo
     )
     Remove-LocalGroup $grupo
 }
+
+function meter_usuario_grupo
+{
+    Param(
+        $usuario,
+        $grupo
+    )
+    Add-LocalGroupMember -Member $usuario -Group $grupo -ErrorAction SilentlyContinue
+}
+
+function sacar_usuario_grupo
+{
+    Param(
+        $usuario,
+        $grupo
+    )
+    Remove-LocalGroupMember -Member $usuario -Group $grupo
+}

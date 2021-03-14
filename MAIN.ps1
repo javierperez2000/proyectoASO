@@ -65,9 +65,18 @@ while ($opcion -ne 5)
 
                         if ($usuario)
                         {
-                            borrar_usuario -usuario $usuario
+                            $existe = $(try { Get-LocalUser -Name $usuario -ErrorAction SilentlyContinue } catch{}) -ne $null
 
-                            Write-Host "`nUsuario $($usuario) eliminado correctamente."
+                            if ($existe -eq $true)
+                            {
+                                borrar_usuario -usuario $usuario
+
+                                Write-Host "`nUsuario $($usuario) eliminado correctamente."
+                            }
+                            else
+                            {
+                                Write-Host "`nEl usuario $($usuario) no existe."
+                            }
                         }
 
                         pulsar_para_continuar
@@ -115,9 +124,18 @@ while ($opcion -ne 5)
 
                         if ($grupo)
                         {
-                            borrar_grupo -grupo $grupo
+                            $existe = $(try { Get-LocalGroup -Name $grupo -ErrorAction SilentlyContinue } catch{}) -ne $null
 
-                            Write-Host "`nGrupo $($grupo) eliminado correctamente."
+                            if ($existe -eq $true)
+                            {
+                                borrar_grupo -grupo $grupo
+
+                                Write-Host "`nGrupo $($grupo) eliminado correctamente."
+                            }
+                            else
+                            {
+                                Write-Host "`nEl usuario $($usuario) no existe."
+                            }
                         }
 
                         pulsar_para_continuar
@@ -125,16 +143,84 @@ while ($opcion -ne 5)
                     5 {
                         Clear-Host
 
-                        Write-Host "Opcion 5"
+                        Write-Host -ForegroundColor Green -BackgroundColor Black "METER UN USUARIO EN UN GRUPO`n"
 
-                        Read-Host "Pulsa cualquier tecla para continuar..."
+                        Write-Host -ForegroundColor Cyan "USUARIOS DEL SISTEMA:"
+
+                        $usuarios = Get-LocalUser
+
+                        foreach ($user in $usuarios)
+                        {
+                            Write-Host $user.Name "    " -NoNewline
+                        }
+
+                        $usuario = Read-Host "`n`nNombre del usuario (En blanco para cancelar)"
+
+                        $grupo = Read-Host "`nNombre del grupo (En blanco para cancelar)"
+
+                        if (($usuario) -or ($grupo))
+                        {
+                            $existeUs = $(try { Get-LocalUser -Name $usuario -ErrorAction SilentlyContinue } catch{}) -ne $null
+
+                            $existeGr = $(try { Get-LocalGroup -Name $grupo -ErrorAction SilentlyContinue } catch{}) -ne $null
+
+                            if ($existeUs -or $existeGr)
+                            {
+                                meter_usuario_grupo -usuario $usuario -grupo $grupo
+
+                                Write-Host "`nEl usuario $($usuario) ha sido añadido al grupo $($grupo) correctamente."
+                            }
+                            else
+                            {
+                                Write-Host "`nEl usuario o el grupo no existe."
+                            }
+                        }
+
+                        pulsar_para_continuar
                     }
                     6 {
                         Clear-Host
 
-                        Write-Host "Opcion 6"
+                        Write-Host -ForegroundColor Green -BackgroundColor Black "ELIMINAR UN USUARIO DE UN GRUPO`n"
 
-                        Read-Host "Pulsa cualquier tecla para continuar..."
+                        $grupo = Read-Host "`nNombre del grupo (En blanco para cancelar)"
+
+                        if ($grupo)
+                        {
+                            $existeGr = $(try { Get-LocalGroup -Name $grupo -ErrorAction SilentlyContinue } catch{}) -ne $null
+
+                            if ($existeGr)
+                            {
+                                Write-Host -ForegroundColor Cyan "`nMiembros del grupo $($grupo):`n"
+
+                                $miembros = Get-LocalGroupMember -Group $grupo
+
+                                foreach ($miembro in $miembros)
+                                {
+                                    Write-Host $miembro.Name.Split("\")[1] "    " -NoNewline
+                                }
+
+                                $usuario = Read-Host "`n`nNombre del usuario (En blanco para cancelar)"
+
+                                if ($usuario)
+                                {
+                                    $existeUs = $(try { Get-LocalUser -Name $usuario -ErrorAction SilentlyContinue } catch{}) -ne $null
+
+                                    if ($existeUs)
+                                    {
+                                        sacar_usuario_grupo -usuario $usuario -grupo $grupo
+
+                                        Write-Host "`nEl usuario $($usuario) ha sido eliminado del grupo $($grupo) correctamente."
+                                    }
+                                    else
+                                    {
+                                        Write-Host "`nEl usuario o el grupo no existe."
+                                    }
+                                }
+                            }
+
+                            pulsar_para_continuar
+                            }
                     }
                     Default {
                         Write-Host -ForegroundColor Green "Opción no válida."
