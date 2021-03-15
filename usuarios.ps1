@@ -2,9 +2,9 @@
 {
     Clear-Host
     Write-Host "Cargando..."
-    Start-Sleep 0.8
+    Start-Sleep 0.6
     Clear-Host
-    Write-Host -ForegroundColor Yellow -BackgroundColor Black "ADMINISTRACIÓN COMPLETA DEL SISTEMA`n"
+    Write-Host -ForegroundColor Yellow -BackgroundColor Black "`nADMINISTRACIÓN COMPLETA DEL SISTEMA`n"
     Write-Host -ForegroundColor Magenta -BackgroundColor Black "USUARIOS Y GRUPOS LOCALES:`n"
     Write-Host -ForegroundColor Cyan "  1)" -NoNewline
     " Crear un usuario."
@@ -28,7 +28,7 @@ function crear_usuario
         $usuario,
         $contraseña
     )
-    New-LocalUser $usuario -Password (ConvertTo-SecureString $contraseña -asplaintext -force)
+    New-LocalUser $usuario -Password (ConvertTo-SecureString $contraseña -asplaintext -force) | Out-Null
 }
 
 function borrar_usuario
@@ -36,7 +36,7 @@ function borrar_usuario
     Param(
         $usuario
     )
-    Remove-LocalUser $usuario
+    Remove-LocalUser $usuario | Out-Null
 }
 
 function crear_grupo
@@ -44,7 +44,7 @@ function crear_grupo
     Param(
         $grupo
     )
-    New-LocalGroup $grupo
+    New-LocalGroup $grupo | Out-Null
 }
 
 function borrar_grupo
@@ -52,7 +52,7 @@ function borrar_grupo
     Param(
         $grupo
     )
-    Remove-LocalGroup $grupo
+    Remove-LocalGroup $grupo | Out-Null
 }
 
 function meter_usuario_grupo
