@@ -264,9 +264,99 @@ while ($opcion -ne 4)
                 {
                     1 
                     {
+                        Clear-Host
+
+                        Write-Host -ForegroundColor Green -BackgroundColor Black "CREAR TAREA PROGRAMADA`n"
+
+                        Write-Host "───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────"
+
+                        Write-Host "  La creación de esta tarea no implica que el contenido esté bien, asegúrese antes que el comando/script es correcto."
+
+                        Write-Host "───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────`n"
+
+                        $nombre = Read-Host "¿Cómo quieres llamar a la tarea? (En blanco para cancelar)"
+
+                        if ($nombre)
+                        {
+                            $existe = $(try { Get-ScheduledTask -TaskName $nombre -ErrorAction SilentlyContinue } catch{}) -ne $null
+
+                            if ($existe -eq $false)
+                            {
+                                $comando = Read-Host "`nComando o ruta absoluta de un script"
+
+                                if ($comando)
+                                {}
+                                else
+                                {
+                                    $comando = "Get-LocalUser"
+                                }
+
+                                $dias = Read-Host "`n¿Cada cuantos días quieres que se repita? (Por defecto 1 para repetir a diario)"
+
+                                if ($dias)
+                                {}
+                                else
+                                {
+                                    $dias = 1
+                                }
+
+                                $hora = Read-Host "`n¿A qué hora quieres que se ejecute? (Formato 24 horas)"
+
+                                if ($hora)
+                                {}
+                                else
+                                {
+                                    $hora = "00:00"
+                                }
+
+                                crear_tarea -nombre $nombre -dias $dias -hora $hora -comando $comando
+
+                                Write-Host "`nTarea programada $($nombre) creada correctamente."
+
+                                $body = $body+"`nSe ha creado una tarea programada llamada $($nombre)."
+                            }
+                            else
+                            {
+                                Write-Host "`nLa tarea programada $($nombre) ya existe."
+                            }
+                        }
+
+                        pulsar_para_continuar
                     }
                     2 
                     {
+                        Clear-Host
+
+                        Write-Host -ForegroundColor Green -BackgroundColor Black "ELIMINAR TAREA PROGRAMADA`n"
+
+                        $tareas = Get-ScheduledTask
+
+                        foreach ($tarea in $tareas)
+                        {
+                            if ($tarea.TaskPath -eq "\")
+                            {
+                                Write-Host $tarea.TaskName "    " -NoNewline
+                            }
+                        }
+
+                        $nombre = Read-Host "`n`n¿Cómo se llama la tarea?"
+
+                        $existe = $(try { Get-ScheduledTask -TaskName $nombre -ErrorAction SilentlyContinue } catch{}) -ne $null
+
+                        if ($existe -eq $true)
+                        {
+                            eliminar_tarea -nombre $nombre
+
+                            Write-Host "`nLa tarea programada $($nombre) se eliminado correctamente."
+
+                            $body = $body+"`nSe ha eliminado una tarea programada llamada $($nombre)."
+                        }
+                        else
+                        {
+                            Write-Host "`nLa tarea programada $($nombre) no existe."
+                        }
+
+                        pulsar_para_continuar
                     }
                     3 
                     {

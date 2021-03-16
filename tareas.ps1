@@ -14,6 +14,23 @@
     " Salir.`n"
 }
 
-# $accion = New-ScheduledTaskAction -Execute "powershell" -Argument "Stop-Computer"
-# $trigger = New-ScheduledTaskTrigger -Daily -DaysInterval 1 -At 3am
-# Register-ScheduledTask $nombre -Action $accion -Trigger $trigger
+function crear_tarea
+{
+    Param(
+        $nombre,
+        $comando,
+        $dias,
+        $hora
+    )
+    $accion = New-ScheduledTaskAction -Execute "powershell" -Argument "$comando"
+    $trigger = New-ScheduledTaskTrigger -Daily -DaysInterval $dias -At $hora
+    Register-ScheduledTask $nombre -Action $accion -Trigger $trigger | Out-Null
+}
+
+function eliminar_tarea
+{
+    Param(
+        $nombre
+    )
+    Unregister-ScheduledTask -TaskName $nombre
+}
