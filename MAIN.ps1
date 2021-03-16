@@ -3,6 +3,7 @@
 Import-Module C:\Users\Administrador\Desktop\proyectoASO\global.ps1
 Import-Module C:\Users\Administrador\Desktop\proyectoASO\usuarios.ps1
 Import-Module C:\Users\Administrador\Desktop\proyectoASO\tareas.ps1
+Import-Module C:\Users\Administrador\Desktop\proyectoASO\informacion.ps1
 
 $body = "CAMBIOS EN EL SISTEMA:`n"
 
@@ -375,14 +376,69 @@ while ($opcion -ne 4)
             Clear-Variable -Name opcion*
         }
         3 {
-            Write-Host -ForegroundColor Green "Tres"
+            while ($opcionInformacion -ne 5)
+            {
+                menu_informacion
 
-            pulsar_para_continuar
+                $opcionInformacion = Read-Host "Elige una opción"
+
+                switch ($opcionInformacion)
+                {
+                    1 
+                    {
+                        Clear-Host
+
+                        sistema
+
+                        pulsar_para_continuar
+                    }
+                    2 
+                    {
+                        Clear-Host
+
+                        procesador
+
+                        pulsar_para_continuar
+                    }
+                    3 
+                    {
+                        Clear-Host
+
+                        memoria
+
+                        pulsar_para_continuar
+                    }
+                    4 
+                    {
+                        Clear-Host
+
+                        sistema
+                        Write-Host ""
+                        procesador
+                        Write-Host ""
+                        memoria
+                        Write-Host ""
+                        pulsar_para_continuar
+                    }
+                    5 
+                    {
+                        ####
+                    }
+                    Default 
+                    {
+                        Clear-Host
+
+                        Write-Host -ForegroundColor Red -BackgroundColor White "`nOPCIÓN NO VÁLIDA."
+
+                        pulsar_para_continuar
+                    }
+                }
+            }
         }
         4 {
             Write-Host -ForegroundColor Yellow "Saliendo..."
 
-            #correo -body $body
+            correo -body $body
         }
         Default {
             Clear-Host
